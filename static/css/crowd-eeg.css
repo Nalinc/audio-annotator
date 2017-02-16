@@ -1,0 +1,38 @@
+html, body{
+	background-color: #03005b;
+}
+
+.labels{
+    width: 90%;
+    float: right;	
+}
+.audio_visual{
+	width: 90%;
+	float: right;
+}
+.time_segment{
+	visibility: hidden;
+}
+.play_bar{
+	display: inline-block;
+	text-align: center;
+    padding: 10px 0px;
+    margin-top: 220px;
+    width: 10%;
+    cursor: pointer;
+}
+.play_audio.fa{
+	font-size: 54px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    color: #03005b;
+    background-color: #fff;
+}
+.play_audio.fa:before{
+	padding: 1px;
+}
+
+.play_bar .timer{
+	display:none;
+}
