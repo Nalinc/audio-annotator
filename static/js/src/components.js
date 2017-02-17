@@ -178,6 +178,10 @@ function WorkflowBtns(exitUrl) {
 
     // Boolean that determined if the exit button is shown
     this.showExitBtn = false;
+
+    this.loadNextBtn = null;
+    this.loadPreviousBtn = null;
+    this.submitBtn = null;
 }
 
 WorkflowBtns.prototype = {
@@ -191,7 +195,6 @@ WorkflowBtns.prototype = {
         this.nextBtn.click(function () {
             $(my).trigger('submit-annotations');
         });
-
         this.exitBtn = $('<button>', {
             text: 'Exit Now',
             class: 'exit btn',
@@ -199,14 +202,45 @@ WorkflowBtns.prototype = {
         this.exitBtn.click(function () {
             window.location = my.exitUrl;
         });
+
+        this.loadNextBtn = $('<div>', {
+            class: 'btn pull-right',
+            text: 'Next'
+        });
+        this.loadNextBtn.click(function () {
+            if(progressStep<3)
+                progressStep++;
+            refreshTaskLevel(progressStep);
+        });
+        this.loadPreviousBtn = $('<div>', {
+            class: 'btn pull-right',
+            text: 'Back'
+        });
+        this.loadPreviousBtn.click(function () {
+            if(progressStep>1){
+                progressStep--;
+            }
+            refreshTaskLevel(progressStep);
+        });
+        this.submitBtn = $('<div>', {
+            class: 'btn pull-right',
+            text: "I'm done!"
+        });
+        this.submitBtn.click(function () {
+            $(my).trigger('submit-annotations');
+        });
     },
 
     // Append the next and exit elements to the the parent container
     update: function() {
-        $('.submit_container').append(this.nextBtn);
+//        $('.submit_container').append(this.nextBtn);
+        $('.submit_container').append(this.loadNextBtn);
+        $('.submit_container').append(this.loadPreviousBtn);
+        $('.submit_container').append(this.submitBtn);
         if (this.showExitBtn) {
             $('.submit_container').append(this.exitBtn);
         }
+        refreshTaskLevel(1);
     },
 
     // Set the value of showExitBtn
@@ -214,3 +248,19 @@ WorkflowBtns.prototype = {
         this.showExitBtn = showExitBtn;
     }
 };
+
+var progressStep = 1;
+
+function refreshTaskLevel (level){
+    $('.progress_bar .btn').removeClass('visited')
+    $('.progress_bar .btn:lt('+level+')').addClass('visited')
+
+    $('.progress_level div').removeClass('visited');
+    $('.progress_level div:nth-child('+level+')').addClass('visited');
+
+    $('.level_description .level').removeClass('visited');
+    $('.level_description .level:nth-child('+level+')').addClass('visited');
+
+    $('.submit_container div').removeClass('visited');
+    $('.submit_container div:lt('+level+')').addClass('visited')    
+}
