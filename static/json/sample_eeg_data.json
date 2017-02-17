@@ -1,11 +1,11 @@
 {
     "task": {
         "feedback": "none",
-        "visualization": "spectrogram",
+        "visualization": "waveform",
         "proximityTag": [],
         "annotationTag": ["Wake","N1","N2","N3","REM"],
         "annotationSolutionsUrl": "/static/json/paris.json",
         "imgUrl": "/static/img/paris.jpg",
-        "url": "/static/wav/paris.wav"
+        "url": "/static/wav/spectrogram_demo_doorknock_mono.wav"
     }
 }

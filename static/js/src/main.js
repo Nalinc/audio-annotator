@@ -35,16 +35,17 @@ function Annotator() {
     });
 
     // Create wavesurfer (audio visualization component)
-    var height = 256;
+    var height = 160;
     this.wavesurfer = Object.create(WaveSurfer);
     this.wavesurfer.init({
         container: '.audio_visual',
-        waveColor: '#FF00FF',
-        progressColor: '#FF00FF',
+        waveColor: '#fff',
+        progressColor: '#fff',
         // For the spectrogram the height is half the number of fftSamples
         fftSamples: height * 2,
         height: height,
-        colorMap: spectrogramColorMap
+        colorMap: spectrogramColorMap,
+        hideScrollbar: true,
     });
 
     // Create labels (labels that appear above each region)

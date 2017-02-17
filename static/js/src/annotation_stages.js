@@ -425,7 +425,7 @@ AnnotationStages.prototype = {
             }
         }
         // Alert the user of a hint
-        this.hint();
+        //this.hint();
     },
 
     // Alert users of hints about how to use the interface

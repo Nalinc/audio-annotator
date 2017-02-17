@@ -25,12 +25,31 @@
 </head>
 <body>
     <div class="annotation">
-        <div class="labels"></div>
-        <div class="audio_visual"></div>
+        <div class="waveform-container">
+            <div class="labels"></div>
+            <div class="audio_visual"></div>            
+        </div>
         <div class="play_bar"></div>
         <div class="hidden_img"></div>
-        <div class="creation_stage_container"></div>
-        <div class="submit_container"></div>
+        <div class="controls_container">
+            <div class="progress_bar">
+                <div class="btn btn-default btn-circle"></div>                
+                <div class="btn btn-primary btn-circle"></div>
+            </div>
+            <div class="progress_level">
+                <div>
+                    Step 1:
+                </div>    
+            </div>
+            <div class="level_description">
+                Try to Sort each segment you identified in the previous step into one of the 5 sleep stages.
+            </div>
+            <div class="task_submit_container">
+                
+            </div>
+        </div>
+<!--         <div class="creation_stage_container"></div>
+        <div class="submit_container"></div> -->
     </div> 
     <script>
         var dataUrl = '/static/json/sample_eeg_data.json';
