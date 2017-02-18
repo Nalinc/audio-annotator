@@ -182,65 +182,81 @@ function WorkflowBtns(exitUrl) {
     this.loadNextBtn = null;
     this.loadPreviousBtn = null;
     this.submitBtn = null;
+    this.type = null;
 }
 
 WorkflowBtns.prototype = {
     // Create dom elements for the next and exit btns
-    create: function() {
+    create: function(type) {
         var my = this;
-        this.nextBtn = $('<button>', {
-            class: 'btn submit',
-            text: 'SUBMIT & LOAD NEXT RECORDING'
-        });
-        this.nextBtn.click(function () {
-            $(my).trigger('submit-annotations');
-        });
-        this.exitBtn = $('<button>', {
-            text: 'Exit Now',
-            class: 'exit btn',
-        });
-        this.exitBtn.click(function () {
-            window.location = my.exitUrl;
-        });
-
-        this.loadNextBtn = $('<div>', {
-            class: 'btn pull-right',
-            text: 'Next'
-        });
-        this.loadNextBtn.click(function () {
-            if(progressStep<3)
-                progressStep++;
-            refreshTaskLevel(progressStep);
-        });
-        this.loadPreviousBtn = $('<div>', {
-            class: 'btn pull-right',
-            text: 'Back'
-        });
-        this.loadPreviousBtn.click(function () {
-            if(progressStep>1){
-                progressStep--;
-            }
-            refreshTaskLevel(progressStep);
-        });
-        this.submitBtn = $('<div>', {
-            class: 'btn pull-right',
-            text: "I'm done!"
-        });
-        this.submitBtn.click(function () {
-            $(my).trigger('submit-annotations');
-        });
+        this.type = type;
+        if(this.type=="crowdeeg"){
+            this.loadNextBtn = $('<div>', {
+                class: 'btn pull-right',
+                text: 'Next'
+            });
+            this.loadNextBtn.click(function () {
+                if(progressStep<3)
+                    progressStep++;
+                refreshTaskLevel(progressStep);
+            });
+            this.loadPreviousBtn = $('<div>', {
+                class: 'btn pull-right',
+                text: 'Back'
+            });
+            this.loadPreviousBtn.click(function () {
+                if(progressStep>1){
+                    progressStep--;
+                }
+                refreshTaskLevel(progressStep);
+            });
+            this.submitBtn = $('<div>', {
+                class: 'btn pull-right',
+                text: "I'm done!"
+            });
+            this.submitBtn.click(function () {
+                $(my).trigger('submit-annotations');
+            });
+        }
+        else{
+            this.nextBtn = $('<button>', {
+                class: 'btn submit',
+                text: 'SUBMIT & LOAD NEXT RECORDING'
+            });
+            this.nextBtn.click(function () {
+                $(my).trigger('submit-annotations');
+            });
+            this.exitBtn = $('<button>', {
+                text: 'Exit Now',
+                class: 'exit btn',
+            });
+            this.exitBtn.click(function () {
+                window.location = my.exitUrl;
+            });
+            this.submitBtn = $('<div>', {
+                class: 'btn pull-right',
+                text: "I'm done!"
+            });
+            this.submitBtn.click(function () {
+                $(my).trigger('submit-annotations');
+            });            
+        }
     },
 
     // Append the next and exit elements to the the parent container
     update: function() {
-//        $('.submit_container').append(this.nextBtn);
-        $('.submit_container').append(this.loadNextBtn);
-        $('.submit_container').append(this.loadPreviousBtn);
-        $('.submit_container').append(this.submitBtn);
+        if(this.type=="crowdeeg"){
+            $('.submit_container').append(this.loadNextBtn);
+            $('.submit_container').append(this.loadPreviousBtn);
+            $('.submit_container').append(this.submitBtn);
+            refreshTaskLevel(1);
+        }
+        else{
+            $('.submit_container').append(this.nextBtn);
+        }
         if (this.showExitBtn) {
             $('.submit_container').append(this.exitBtn);
         }
-        refreshTaskLevel(1);
     },
 
     // Set the value of showExitBtn
@@ -252,6 +268,11 @@ WorkflowBtns.prototype = {
 var progressStep = 1;
 
 function refreshTaskLevel (level){
+    if(level==2){
+        $('.creation_stage_container').removeClass('disabled');
+    }else{
+        $('.creation_stage_container').addClass('disabled')
+    }
     $('.progress_bar .btn').removeClass('visited')
     $('.progress_bar .btn:lt('+level+')').addClass('visited')
 

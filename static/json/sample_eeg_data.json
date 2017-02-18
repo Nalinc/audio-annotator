@@ -1,5 +1,6 @@
 {
     "task": {
+    	"name":"crowdeeg",
         "feedback": "none",
         "visualization": "waveform",
         "proximityTag": [],

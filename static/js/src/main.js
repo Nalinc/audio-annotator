@@ -35,7 +35,7 @@ function Annotator() {
     });
 
     // Create wavesurfer (audio visualization component)
-    var height = 160;
+    var height = 128;
     this.wavesurfer = Object.create(WaveSurfer);
     this.wavesurfer.init({
         container: '.audio_visual',
@@ -69,11 +69,11 @@ function Annotator() {
     this.stages = new AnnotationStages(this.wavesurfer, this.hiddenImage);
     this.stages.create();
 
-    // Create Workflow btns (submit and exit)
+/*    // Create Workflow btns (submit and exit)
     this.workflowBtns = new WorkflowBtns();
     this.workflowBtns.create();
 
-    this.addEvents();
+    this.addEvents();*/
 }
 
 Annotator.prototype = {
@@ -179,6 +179,13 @@ Annotator.prototype = {
             my.wavesurfer.params.visualization = my.currentTask.visualization; // invisible, spectrogram, waveform
             my.wavesurfer.params.feedback = my.currentTask.feedback; // hiddenImage, silent, notify, none 
             my.wavesurfer.load(my.currentTask.url);
+
+            // Create Workflow btns (submit and exit)
+            my.workflowBtns = new WorkflowBtns();
+            my.workflowBtns.create(my.currentTask.name);
+            //my.workflowBtns.update();
+
+            my.addEvents();
         };
 
         if (this.currentTask.feedback !== 'none') {

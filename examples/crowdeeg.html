@@ -31,6 +31,7 @@
         </div>
         <div class="play_bar"></div>
         <div class="hidden_img"></div>
+        <div class="creation_stage_container disabled"></div>        
         <div class="controls_container">
             <div class="progress_bar">
                 <div class="btn btn-circle "></div>
@@ -45,11 +46,15 @@
             <div class="level_description">
                 <div class="level level_1">
                     <div>
-                        Press your space bar or click the timeline when you think you hear a distinct change in the audio playback.
+                        Drag and select regions of coherent sound track. Select new region where you think you hear a distinct change in the audio playback.
+                    </div>
+                    <div>
+                        Press space bar or click the timeline to jump to a specific time.
                     </div>
                 </div>
                 <div class="level level_2">
-                    <div>Try to Sort each segment you identified in the previous step into one of the 5 sleep stages.</div>
+                    <div>Double click the region to hide/show the annotator or adjust the selection.</div>
+                    <div>Try to label each segment you identified in the previous step into one of the 5 sleep stages.</div>
                     <div>Click to play back an example:</div>
                     <div class="examples">
                         <div class="btn">Wake</div>
@@ -69,13 +74,8 @@
                 </div>
             </div>
             <div class="submit_container">
-<!--                 <div class="btn pull-right">Next</div>
-                <div class="btn pull-right">Back</div>
-                <div class="btn pull-right">I'm done!</div> -->
             </div>
         </div>
-<!--         <div class="creation_stage_container"></div>
-        <div class="submit_container"></div> -->
     </div> 
     <script>
         var dataUrl = '/static/json/sample_eeg_data.json';

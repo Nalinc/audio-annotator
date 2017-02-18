@@ -4,7 +4,7 @@ html, body{
 
 .audio_visual > wave{
     border: 1px solid #fff;
-    height:160px !important;
+    height: 128px !important;
 }
 
 .audio_visual > wave > canvas {
@@ -38,11 +38,39 @@ html, body{
 .time_segment{
 	visibility: hidden;
 }
+.creation_stage_container{
+    position: absolute;
+    width: 100%;
+    height: 50px;
+}
+.creation_stage_container.disabled{
+    display: none!important;
+}
+.creation_stage_container .tag_container{
+    margin:0 auto;
+    text-align: center;
+}
+.creation_stage_container .tag_container .stage_3_label{
+    display:none;
+}
+.creation_stage_container .tag_container .annotation_tag.btn{
+    background-color: rgba(255,255,255,0);
+    margin: 0px!important;
+    color: #fff !important;
+    border: 1px solid #fff;
+    width: 70px;
+    text-align: center;
+    padding: 0;    
+}
+.creation_stage_container .tag_container .annotation_tag.btn:hover{
+    background-color: #fff;
+    color: #000!important;
+}
 .play_bar{
 	display: inline-block;
 	text-align: center;
     padding: 10px 0px;
-    margin-top: 160px;
+    margin-top: 138px;
     width: 10%;
     cursor: pointer;
 }
