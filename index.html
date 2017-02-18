@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Audio Annotator</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./static/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="./static/css/audio-annotator.css">
+    <link rel="stylesheet" type="text/css" href="./static/css/crowd-eeg.css">
+    
+    <script type="text/javascript" src="./static/js/lib/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="./static/js/lib/materialize.min.js"></script>
+    <script type="text/javascript" src="./static/js/lib/wavesurfer.min.js"></script>
+    <script type="text/javascript" src="./static/js/lib/wavesurfer.spectrogram.min.js"></script>
+    <script type="text/javascript" src="./static/js/colormap/colormap.min.js"></script>
+
+    <script type="text/javascript" src="./static/js/src/message.js"></script>
+    <script type="text/javascript" src="./static/js/src/wavesurfer.regions.js"></script>
+    <script type="text/javascript" src="./static/js/src/wavesurfer.drawer.extended.js"></script>
+    <script type="text/javascript" src="./static/js/src/wavesurfer.labels.js"></script>
+    <script type="text/javascript" src="./static/js/src/hidden_image.js"></script>
+    <script type="text/javascript" src="./static/js/src/components.js"></script>
+    <script type="text/javascript" src="./static/js/src/annotation_stages.js"></script>
+    <script type="text/javascript" src="./static/js/src/main.js" defer></script>
+</head>
+<body>
+    <div class="annotation">
+        <div class="waveform-container">
+            <div class="labels"></div>
+            <div class="audio_visual"></div>            
+        </div>
+        <div class="play_bar"></div>
+        <div class="hidden_img"></div>
+        <div class="creation_stage_container disabled"></div>        
+        <div class="controls_container">
+            <div class="progress_bar">
+                <div class="btn btn-circle "></div>
+                <div class="btn btn-circle"></div>
+                <div class="btn btn-circle"></div>
+            </div>
+            <div class="progress_level">
+                <div> Step 1: Distinction </div>
+                <div> Step 2: Annotation </div>
+                <div> Step 3: Feedback(optional) </div>
+            </div>
+            <div class="level_description">
+                <div class="level level_1">
+                    <div>
+                        Drag and select regions of coherent sound track. Select new region where you think you hear a distinct change in the audio playback.
+                    </div>
+                    <div>
+                        Press space bar or click the timeline to jump to a specific time.
+                    </div>
+                </div>
+                <div class="level level_2">
+                    <div>Double click the region to hide/show the annotator or adjust the selection.</div>
+                    <div>Try to label each segment you identified in the previous step into one of the 5 sleep stages.</div>
+                    <div>Click to play back an example:</div>
+                    <div class="examples">
+                        <div class="btn">Wake</div>
+                        <div class="btn">N1</div>
+                        <div class="btn">N2</div>
+                        <div class="btn">N3</div>
+                        <div class="btn">REM</div>
+                    </div>
+                </div>
+                <div class="level level_3">
+                    <div>
+                        What does REM sound like?  Why does it sound differently from other classes?
+                    </div>
+                    <div>
+                        <textarea></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="submit_container">
+            </div>
+        </div>
+    </div> 
+    <script>
+        var dataUrl = './static/json/sample_eeg_data.json';
+    </script>   
+</body>
+</html>
