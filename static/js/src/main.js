@@ -113,9 +113,47 @@ Annotator.prototype = {
         this.taskStartTime = new Date().getTime();
     },
 
+    clickToMarkRegion: function(){
+        var index, options, startTime, endTime, maxLastEndTime=0;
+        var wavesurfer = this.wavesurfer;
+        var endTime = wavesurfer.getCurrentTime();
+        /*  
+            Check if a region already exists?
+            If yes, mark the begining of new region just after the end of last region.
+            Else, start with 0.00
+        */
+        for (index in wavesurfer.regions.list){
+            var region = wavesurfer.regions.list[index]
+            if(region.end < endTime && region.end > maxLastEndTime){
+                startTime = region.end + 0.01;
+                maxLastEndTime = region.end;
+            }
+        }
+        if(!startTime){
+            startTime = 0.01;
+        }
+        options = {
+            start: startTime,
+            end: endTime,
+        };
+        wavesurfer.addRegion(options);
+    },
+
     // Event Handler, if the user clicks submit annotations call submitAnnotations
     addWorkflowBtnEvents: function() {
+        var that = this;
         $(this.workflowBtns).on('submit-annotations', this.submitAnnotations.bind(this));
+        
+        //Add a new region on clicking split button
+        $(document).on("click", ".btn_split div",this.clickToMarkRegion.bind(this))
+        
+        //Add a New region on pressing key 's'
+        $(document).bind("keydown", function(e){ 
+            e = e || window.event;
+            var charCode = e.which || e.keyCode;
+            if(charCode==83)
+                that.clickToMarkRegion()
+        });
     },
 
     addEvents: function() {
