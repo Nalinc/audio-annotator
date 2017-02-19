@@ -35,9 +35,6 @@ html, body{
 .audio_visual > wave{
     width:100%;
 }
-.time_segment{
-	visibility: hidden;
-}
 .creation_stage_container{
     position: absolute;
     width: 100%;
@@ -46,8 +43,11 @@ html, body{
 .creation_stage_container.disabled{
     display: none!important;
 }
+.creation_stage_container .time_segment{
+    display: none!important;
+}
 .creation_stage_container .tag_container{
-    margin:0 auto;
+    margin: 10px auto 0 auto;
     text-align: center;
 }
 .creation_stage_container .tag_container .stage_3_label{
@@ -89,7 +89,20 @@ html, body{
 .play_bar .timer{
 	display:none;
 }
-
+.btn_split{
+    display: inline-block;
+    color: #000;
+    text-align: center;
+    width: 10%;
+    height: 25px;
+}
+.btn_split div{
+    width:50px;
+    background-color: #fff;
+    border: 1px solid #fff;
+    margin: 0 auto;
+    cursor: pointer;
+}
 .controls_container{
     margin-top: 100px;
     text-align: center;
@@ -166,10 +179,22 @@ html, body{
 .submit_container .btn{
 	background-color: #fff;
 	color: #000!important;
-    font-weight: normal;
-    margin: 10px 10px 10px 0;
+    font-weight: normal;    margin: 10px 10px 10px 0;
     display: none;
 }
 .submit_container .btn.visited{
 	display: inline-block;
+}
+@media only screen and (max-width: 960px) {
+    .waveform-container{
+        width: 100%;
+    }
+    .play_bar {
+        display: block;
+        margin: auto;
+    }
+    .btn_split{
+        display: block;
+        margin: 0 auto;
+    }
 }
