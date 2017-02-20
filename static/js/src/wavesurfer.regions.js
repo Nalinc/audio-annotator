@@ -462,7 +462,8 @@ WaveSurfer.Region = {
 
                     // Drag
                     if (my.drag && drag) {
-                        my.onDrag(delta);
+                        //Disable drag
+                        //my.onDrag(delta);
                     }
 
                     // Resize
@@ -496,11 +497,24 @@ WaveSurfer.Region = {
 
     onResize: function (delta, direction) {
         if (direction == 'start') {
+            if(this.element.previousSibling){
+                var prevRegion = this.element.previousSibling.attributes['data-id'].nodeValue;
+                this.wavesurfer.regions.list[prevRegion].update({
+                    end: Math.min(this.start + delta, this.end) - 0.01
+                });
+            }
             this.update({
                 start: Math.min(this.start + delta, this.end),
                 end: Math.max(this.start + delta, this.end)
             });
         } else {
+            if(this.element.nextSibling){
+                var nextRegion = this.element.nextSibling.attributes['data-id'].nodeValue;
+                this.wavesurfer.regions.list[nextRegion].update({
+                    start: Math.max(this.end + delta, this.start) + 0.01
+                })
+            }
+
             this.update({
                 start: Math.min(this.end + delta, this.start),
                 end: Math.max(this.end + delta, this.start)
