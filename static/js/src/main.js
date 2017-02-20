@@ -131,21 +131,36 @@ Annotator.prototype = {
     clickToMarkRegion: function(){
         var index, options, startTime, endTime, maxLastEndTime=0;
         var wavesurfer = this.wavesurfer;
-        var endTime = wavesurfer.getCurrentTime();
+        var currentTime = wavesurfer.getCurrentTime();
         /*  
             Check if a region already exists?
             If yes, mark the begining of new region just after the end of last region.
             Else, start with 0.00
         */
+        loop1:
         for (index in wavesurfer.regions.list){
-            var region = wavesurfer.regions.list[index]
-            if(region.end < endTime && region.end > maxLastEndTime){
+            var region = wavesurfer.regions.list[index];
+            if(region.end==currentTime)
+                return;
+            if(region.end < currentTime && region.end > maxLastEndTime){
                 startTime = region.end + 0.01;
                 maxLastEndTime = region.end;
+            }
+            if(currentTime > region.start && currentTime < region.end){
+                startTime = currentTime + 0.01;
+                endTime = region.end;
+
+                region.update({
+                    end: currentTime
+                });
+                break loop1;
             }
         }
         if(!startTime){
             startTime = 0.01;
+        }
+        if(!endTime){
+            endTime = currentTime;
         }
         options = {
             drag: false,
