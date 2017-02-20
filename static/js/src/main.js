@@ -167,7 +167,8 @@ Annotator.prototype = {
             start: startTime,
             end: endTime
         };
-        wavesurfer.addRegion(options);
+        var newRegion = window.newRegion= wavesurfer.addRegion(options);
+        wavesurfer.fireEvent('region-dblclick',newRegion);
     },
 
     // Event Handler, if the user clicks submit annotations call submitAnnotations
