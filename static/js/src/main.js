@@ -79,6 +79,8 @@ function Annotator() {
 Annotator.prototype = {
     addWaveSurferEvents: function() {
         var my = this;
+        //Disable manual drag selection
+        my.wavesurfer.regions.disableDragSelection();
 
         // function that moves the vertical progress bar to the current time in the audio clip
         var updateProgressBar = function () {
@@ -89,7 +91,20 @@ Annotator.prototype = {
         // Update vertical progress bar to the currentTime when the sound clip is 
         // finished or paused since it is only updated on audioprocess
         this.wavesurfer.on('pause', updateProgressBar);
-        this.wavesurfer.on('finish', updateProgressBar);    
+        this.wavesurfer.on('finish', function(){
+            var markLastPortion = true;
+            if(my.wavesurfer.getCurrentTime() == my.wavesurfer.backend.getDuration()){
+                for (var index in my.wavesurfer.regions.list){
+                    var region = my.wavesurfer.regions.list[index]
+                    if(region.end == my.wavesurfer.backend.getDuration()){
+                        markLastPortion = false;
+                    }
+                }
+                if(markLastPortion)
+                    my.clickToMarkRegion();
+            }
+            updateProgressBar();
+        });
 
         // When a new sound file is loaded into the wavesurfer update the  play bar, update the 
         // annotation stages back to stage 1, update when the user started the task, update the workflow buttons.
@@ -116,25 +131,41 @@ Annotator.prototype = {
     clickToMarkRegion: function(){
         var index, options, startTime, endTime, maxLastEndTime=0;
         var wavesurfer = this.wavesurfer;
-        var endTime = wavesurfer.getCurrentTime();
+        var currentTime = wavesurfer.getCurrentTime();
         /*  
             Check if a region already exists?
             If yes, mark the begining of new region just after the end of last region.
             Else, start with 0.00
         */
+        loop1:
         for (index in wavesurfer.regions.list){
-            var region = wavesurfer.regions.list[index]
-            if(region.end < endTime && region.end > maxLastEndTime){
+            var region = wavesurfer.regions.list[index];
+            if(region.end==currentTime)
+                return;
+            if(region.end < currentTime && region.end > maxLastEndTime){
                 startTime = region.end + 0.01;
                 maxLastEndTime = region.end;
+            }
+            if(currentTime > region.start && currentTime < region.end){
+                startTime = currentTime + 0.01;
+                endTime = region.end;
+
+                region.update({
+                    end: currentTime
+                });
+                break loop1;
             }
         }
         if(!startTime){
             startTime = 0.01;
         }
+        if(!endTime){
+            endTime = currentTime;
+        }
         options = {
+            drag: false,
             start: startTime,
-            end: endTime,
+            end: endTime
         };
         wavesurfer.addRegion(options);
     },
