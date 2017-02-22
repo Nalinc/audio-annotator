@@ -129,9 +129,14 @@ Annotator.prototype = {
     },
 
     clickToMarkRegion: function(){
-        var index, options, startTime, endTime, maxLastEndTime=0;
+        var index, options, startTime=0, endTime, maxLastEndTime=Number.MIN_SAFE_INTEGER;
         var wavesurfer = this.wavesurfer;
         var currentTime = wavesurfer.getCurrentTime();
+
+        /* Return if audio is not played yet*/
+        if(!currentTime){
+            return;
+        }
         /*  
             Check if a region already exists?
             If yes, mark the begining of new region just after the end of last region.
@@ -143,31 +148,29 @@ Annotator.prototype = {
             if(region.end==currentTime)
                 return;
             if(region.end < currentTime && region.end > maxLastEndTime){
-                startTime = region.end + 0.01;
+                startTime = region.end;
                 maxLastEndTime = region.end;
             }
             if(currentTime > region.start && currentTime < region.end){
-                startTime = currentTime + 0.01;
+                startTime = currentTime-0.01;
                 endTime = region.end;
-
                 region.update({
-                    end: currentTime
+                    start: region.start,
+                    end: currentTime-0.01
                 });
                 break loop1;
             }
         }
-        if(!startTime){
-            startTime = 0.01;
-        }
+        startTime += 0.01;
         if(!endTime){
             endTime = currentTime;
         }
         options = {
-            drag: false,
             start: startTime,
             end: endTime
         };
-        wavesurfer.addRegion(options);
+        var newRegion = window.newRegion= wavesurfer.addRegion(options);
+        wavesurfer.fireEvent('region-dblclick',newRegion);
     },
 
     // Event Handler, if the user clicks submit annotations call submitAnnotations

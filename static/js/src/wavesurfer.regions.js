@@ -497,28 +497,57 @@ WaveSurfer.Region = {
 
     onResize: function (delta, direction) {
         if (direction == 'start') {
-            if(this.element.previousSibling){
-                var prevRegion = this.element.previousSibling.attributes['data-id'].nodeValue;
-                this.wavesurfer.regions.list[prevRegion].update({
-                    end: Math.min(this.start + delta, this.end) - 0.01
-                });
+            if(this.end - (this.start+delta) > 0.2){
+                var prevRegion, nextRegion, maxLastEndTime=Number.MIN_SAFE_INTEGER, minNextStartTime=Number.MAX_SAFE_INTEGER;
+                for (var index in this.wavesurfer.regions.list){
+                    var region = this.wavesurfer.regions.list[index];
+                    if(region.id==this.id)
+                        continue;
+                    if(region.end < this.end && region.end > maxLastEndTime){
+                        maxLastEndTime=region.end;
+                        prevRegion=region;
+                    }
+                    if(region.start > this.start && region.start < minNextStartTime){
+                        minNextStartTime=region.start;
+                        nextRegion=region;
+                    }
+                }
+                if((this.start+delta) - (prevRegion.start) > 0.2){
+                    prevRegion.update({
+                        end: this.start + delta - 0.01
+                    });
+                    this.update({
+                        start: this.start + delta,
+                        end: this.end
+                    });
+                }
             }
-            this.update({
-                start: Math.min(this.start + delta, this.end),
-                end: Math.max(this.start + delta, this.end)
-            });
         } else {
-            if(this.element.nextSibling){
-                var nextRegion = this.element.nextSibling.attributes['data-id'].nodeValue;
-                this.wavesurfer.regions.list[nextRegion].update({
-                    start: Math.max(this.end + delta, this.start) + 0.01
-                })
+            if((this.end+delta) - this.start > 0.2){
+                var prevRegion, nextRegion, maxLastEndTime=Number.MIN_SAFE_INTEGER, minNextStartTime=Number.MAX_SAFE_INTEGER;
+                for (var index in this.wavesurfer.regions.list){
+                    var region = this.wavesurfer.regions.list[index];
+                    if(region.id==this.id)
+                        continue;
+                    if(region.end < this.end && region.end > maxLastEndTime){
+                        maxLastEndTime=region.end;
+                        prevRegion=region;
+                    }
+                    if(region.start > this.start && region.start < minNextStartTime){
+                        minNextStartTime=region.start;
+                        nextRegion=region;
+                    }
+                }
+                if(nextRegion.end - (this.end+delta) > 0.2){
+                    nextRegion.update({
+                        start: this.end + delta + 0.01,
+                    });                    
+                    this.update({
+                        start: this.start,
+                        end: this.end + delta
+                    }); 
+                }
             }
-
-            this.update({
-                start: Math.min(this.end + delta, this.start),
-                end: Math.max(this.end + delta, this.start)
-            });
         }
     }
 };
