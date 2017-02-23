@@ -512,7 +512,7 @@ WaveSurfer.Region = {
                         nextRegion=region;
                     }
                 }
-                if((this.start+delta) - (prevRegion.start) > 0.2){
+                if(prevRegion && (this.start+delta) - (prevRegion.start) > 0.2){
                     prevRegion.update({
                         end: this.start + delta - 0.01
                     });
@@ -521,6 +521,12 @@ WaveSurfer.Region = {
                         end: this.end
                     });
                 }
+                if(!prevRegion){
+                    this.update({
+                        start: this.start,
+                        end: this.end + delta
+                    });
+                }                
             }
         } else {
             if((this.end+delta) - this.start > 0.2){
@@ -538,14 +544,20 @@ WaveSurfer.Region = {
                         nextRegion=region;
                     }
                 }
-                if(nextRegion.end - (this.end+delta) > 0.2){
+                if(nextRegion && nextRegion.end - (this.end+delta) > 0.2){
                     nextRegion.update({
                         start: this.end + delta + 0.01,
-                    });                    
+                    });
                     this.update({
                         start: this.start,
                         end: this.end + delta
-                    }); 
+                    });
+                }
+                if(!nextRegion){
+                    this.update({
+                        start: this.start,
+                        end: this.end + delta
+                    });
                 }
             }
         }
