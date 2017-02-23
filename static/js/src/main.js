@@ -129,7 +129,7 @@ Annotator.prototype = {
     },
 
     clickToMarkRegion: function(){
-        var index, options, startTime=0, endTime, maxLastEndTime=Number.MIN_SAFE_INTEGER;
+        var index, options, startTime=0, endTime;
         var wavesurfer = this.wavesurfer;
         var currentTime = wavesurfer.getCurrentTime();
 
@@ -142,34 +142,46 @@ Annotator.prototype = {
             If yes, mark the begining of new region just after the end of last region.
             Else, start with 0.00
         */
-        loop1:
+        var prevRegion, nextRegion, regionToSplit, maxLastEndTime=Number.MIN_SAFE_INTEGER, minNextStartTime=Number.MAX_SAFE_INTEGER;
         for (index in wavesurfer.regions.list){
             var region = wavesurfer.regions.list[index];
             if(region.end==currentTime)
                 return;
             if(region.end < currentTime && region.end > maxLastEndTime){
-                startTime = region.end;
-                maxLastEndTime = region.end;
+                maxLastEndTime=region.end;
+                prevRegion=region;
+            }
+            if(region.start > currentTime && region.start < minNextStartTime){
+                minNextStartTime=region.start;
+                nextRegion=region;
             }
             if(currentTime > region.start && currentTime < region.end){
-                startTime = currentTime-0.01;
-                endTime = region.end;
-                region.update({
-                    start: region.start,
-                    end: currentTime-0.01
-                });
-                break loop1;
+                regionToSplit = region;
             }
         }
-        startTime += 0.01;
-        if(!endTime){
+        if(prevRegion)
+            startTime = prevRegion.end + 0.01;
+        else
+            startTime = 0.01;
+        if(nextRegion)
+            endTime = nextRegion.start - 0.01;
+        else
             endTime = currentTime;
+        if(regionToSplit){
+            regionToSplit.remove();
+            var newSplitRegion = wavesurfer.addRegion({
+                start: regionToSplit.start,
+                end: currentTime - 0.01
+            });
+            wavesurfer.fireEvent('region-dblclick',newSplitRegion);
+            startTime = currentTime + 0.01;
+            if(!nextRegion)
+                endTime = regionToSplit.end;
         }
-        options = {
+        var newRegion = wavesurfer.addRegion({
             start: startTime,
             end: endTime
-        };
-        var newRegion = window.newRegion= wavesurfer.addRegion(options);
+        });
         wavesurfer.fireEvent('region-dblclick',newRegion);
     },
 
