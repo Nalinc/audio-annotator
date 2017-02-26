@@ -247,7 +247,7 @@ WaveSurfer.Label = {
         this.text.innerHTML = (this.region.annotation || '?');
         this.style(this.element, {
             left: this.region.element.offsetLeft + 'px',
-            bottom: bottom + 'px',
+            bottom: '0px',
             width: this.region.element.offsetWidth + 'px',
             backgroundColor: this.region.color,
             zIndex: this.wavesurfer.drawer.wrapper.scrollWidth - this.element.offsetWidth,
