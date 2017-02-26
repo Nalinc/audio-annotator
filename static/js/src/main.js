@@ -176,7 +176,7 @@ Annotator.prototype = {
             wavesurfer.fireEvent('region-dblclick',newSplitRegion);
             startTime = currentTime + 0.01;
             if(!nextRegion)
-                endTime = regionToSplit.end;
+                endTime = regionToSplit.end + 0.01;
         }
         var newRegion = wavesurfer.addRegion({
             start: startTime,

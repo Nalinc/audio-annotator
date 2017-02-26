@@ -318,9 +318,35 @@ WaveSurfer.Region = {
         }
 
         if (this.element != null) {
-            var regionWidth = ~~((this.end - this.start) / dur * width);
+            var prevRegion, nextRegion, regionToSplit, maxLastEndTime=Number.MIN_SAFE_INTEGER, minNextStartTime=Number.MAX_SAFE_INTEGER;
+            for (var index in this.wavesurfer.regions.list){
+                var region = this.wavesurfer.regions.list[index];
+                if(region.id==this.id)
+                    continue;
+                if(region.end < this.end && region.end > maxLastEndTime){
+                    maxLastEndTime=region.end;
+                    prevRegion=region;
+                }
+                if(region.start > this.start && region.start < minNextStartTime){
+                    minNextStartTime=region.start;
+                    nextRegion=region;
+                }
+            }
+
+            var leftOffset, regionWidth;
+            regionWidth = ~~((this.end - this.start) / dur * width);
+            if(prevRegion){
+                leftOffset = parseInt(prevRegion.element.style.left)+parseInt(prevRegion.element.style.width)+1;
+            }
+            else
+                leftOffset = 1;
+            if(nextRegion){
+               // regionWidth = parseInt(nextRegion.element.style.left) - leftOffset;
+               console.log(this.wavesurfer.getCurrentTime())
+            }
+
             this.style(this.element, {
-                left: ~~(this.start / dur * width) + 'px',
+                left: leftOffset + 'px',
                 width: regionWidth + 'px',
                 cursor: this.drag ? 'move' : 'default',
                 zIndex: width - regionWidth
