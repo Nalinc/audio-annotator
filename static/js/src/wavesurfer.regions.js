@@ -336,7 +336,9 @@ WaveSurfer.Region = {
             var leftOffset, regionWidth;
             regionWidth = ~~((this.end - this.start) / dur * width);
             if(prevRegion){
-                leftOffset = parseInt(prevRegion.element.style.left)+parseInt(prevRegion.element.style.width)+1;
+                if(this.element.className.indexOf("current_region") != -1 && this.end + 0.01 != this.wavesurfer.getCurrentTime()){
+                    leftOffset = parseInt(prevRegion.element.style.left)+parseInt(prevRegion.element.style.width)+1;
+                }
             }
             else
                 leftOffset = 1;
@@ -344,7 +346,13 @@ WaveSurfer.Region = {
                // regionWidth = parseInt(nextRegion.element.style.left) - leftOffset;
                console.log(this.wavesurfer.getCurrentTime())
             }
-
+/*
+            if(nextRegion){
+               if(this.element.className.indexOf("current_region") != -1 && this.end + 0.01 != this.wavesurfer.getCurrentTime()){
+                regionWidth = parseInt(nextRegion.element.style.left) - (parseInt(prevRegion.element.style.left) + parseInt(prevRegion.element.style.width)) - 2;
+               }
+            }
+*/
             this.style(this.element, {
                 left: leftOffset + 'px',
                 width: regionWidth + 'px',
