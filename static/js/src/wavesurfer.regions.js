@@ -342,10 +342,10 @@ WaveSurfer.Region = {
             }
             else
                 leftOffset = 1;
-            if(nextRegion){
+/*            if(nextRegion){
                // regionWidth = parseInt(nextRegion.element.style.left) - leftOffset;
                console.log(this.wavesurfer.getCurrentTime())
-            }
+            }*/
 /*
             if(nextRegion){
                if(this.element.className.indexOf("current_region") != -1 && this.end + 0.01 != this.wavesurfer.getCurrentTime()){
@@ -353,6 +353,10 @@ WaveSurfer.Region = {
                }
             }
 */
+            if(this.element.className.indexOf("current_region") == -1){
+                leftOffset = ~~(this.start / dur * width)
+            }
+
             this.style(this.element, {
                 left: leftOffset + 'px',
                 width: regionWidth + 'px',
