@@ -129,7 +129,7 @@ Annotator.prototype = {
     },
 
     clickToMarkRegion: function(){
-        var index, options, startTime=0, endTime, maxLastEndTime=Number.MIN_SAFE_INTEGER;
+        var index, options, startTime=0, endTime, maxLastEndTime=Number.MIN_SAFE_INTEGER, prevRegion;
         var wavesurfer = this.wavesurfer;
         var currentTime = wavesurfer.getCurrentTime();
 
@@ -152,25 +152,34 @@ Annotator.prototype = {
                 maxLastEndTime = region.end;
             }
             if(currentTime > region.start && currentTime < region.end){
-                startTime = currentTime-0.01;
-                endTime = region.end;
-                region.update({
-                    start: region.start,
-                    end: currentTime-0.01
-                });
+                prevRegion = region;
                 break loop1;
             }
         }
-        startTime += 0.01;
+        startTime = (prevRegion)?currentTime-0.01:(startTime+0.01);
         if(!endTime){
             endTime = currentTime;
         }
+
         options = {
             start: startTime,
             end: endTime
         };
+        if(prevRegion){
+            options['splitSegment'] = true;
+        }
         var newRegion = window.newRegion= wavesurfer.addRegion(options);
         wavesurfer.fireEvent('region-dblclick',newRegion);
+
+        if(prevRegion){
+            startTime = currentTime-0.01;
+            endTime = prevRegion.end;
+            region.update({
+                start: prevRegion.start,
+                end: currentTime-0.01,
+                splitSegment: true
+            });            
+        }
     },
 
     // Event Handler, if the user clicks submit annotations call submitAnnotations

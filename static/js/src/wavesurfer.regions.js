@@ -153,6 +153,7 @@ WaveSurfer.Region = {
         this.attributes = params.attributes || {};
         this.annotation = params.annotation || '';
         this.proximity = params.proximity || '';
+        this.splitSegment = params.splitSegment || '';
 
         this.maxLength = params.maxLength;
         this.minLength = params.minLength;
@@ -202,7 +203,9 @@ WaveSurfer.Region = {
         if (null != params.proximity) {
             this.proximity = params.proximity;
         }
-
+        if (null != params.splitSegment) {
+            this.splitSegment = params.splitSegment;
+        }
         this.updateRender();
         this.fireEvent('update');
         this.wavesurfer.fireEvent('region-updated', this);
@@ -336,26 +339,19 @@ WaveSurfer.Region = {
             var leftOffset, regionWidth;
             regionWidth = ~~((this.end - this.start) / dur * width);
             if(prevRegion){
-                if(this.element.className.indexOf("current_region") != -1 && this.end + 0.01 != this.wavesurfer.getCurrentTime()){
+                if(!this.splitSegment)
                     leftOffset = parseInt(prevRegion.element.style.left)+parseInt(prevRegion.element.style.width)+1;
+                if(prevRegion.splitSegment){
+                    leftOffset = parseInt(prevRegion.element.style.left)+parseInt(prevRegion.element.style.width)+1;
+                    leftOffset += (~~((this.start - prevRegion.end) / dur * width))
+                    if(this.splitSegment){
+                        delete prevRegion.splitSegment;                    
+                    }
+
                 }
             }
             else
                 leftOffset = 1;
-/*            if(nextRegion){
-               // regionWidth = parseInt(nextRegion.element.style.left) - leftOffset;
-               console.log(this.wavesurfer.getCurrentTime())
-            }*/
-/*
-            if(nextRegion){
-               if(this.element.className.indexOf("current_region") != -1 && this.end + 0.01 != this.wavesurfer.getCurrentTime()){
-                regionWidth = parseInt(nextRegion.element.style.left) - (parseInt(prevRegion.element.style.left) + parseInt(prevRegion.element.style.width)) - 2;
-               }
-            }
-*/
-            if(this.element.className.indexOf("current_region") == -1){
-                leftOffset = ~~(this.start / dur * width)
-            }
 
             this.style(this.element, {
                 left: leftOffset + 'px',
