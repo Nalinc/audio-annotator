@@ -209,8 +209,18 @@ WaveSurfer.Label = {
             borderRadius: '2px',
             fontSize: '12px',
             textTransform: 'uppercase',
-            textOverflow: 'ellipsis',
-            overflow: 'hidden'
+            textOverflow: 'ellipsis'
+        });
+
+        // Add play button inside the label
+        this.deleteTransitionPoint = this.element.appendChild(document.createElement('i'));
+        this.deleteTransitionPoint.className = 'fa fa-remove'; // Font Awesome Icon
+        this.style(this.deleteTransitionPoint, {
+            position: 'absolute',
+            top: '-18px',
+            left: '-6px',
+            cursor: 'pointer',
+            fontSize: '16px'
         });
 
         // Add play button inside the label
@@ -218,23 +228,12 @@ WaveSurfer.Label = {
         this.playBtn.className = 'fa fa-play-circle'; // Font Awesome Icon
         this.style(this.playBtn, {
             marginRight: '5px',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            fontSize: '15px'
         });
 
         this.text = this.element.appendChild(document.createElement('span'));
         this.text.innerHTML = '?';
-
-        // add delete region to the right
-        this.deleteRegion = labelEl.appendChild(document.createElement('i'));
-        this.deleteRegion.className = 'fa fa-times-circle'
-
-        this.style(this.deleteRegion, {
-            position: 'absolute',
-            marginTop: '3px',
-            right: '0px',
-            marginRight: '5px',
-            cursor: 'pointer'
-        });
 
         // Place the label on the bottom row
         this.updateRender(2);
@@ -273,14 +272,14 @@ WaveSurfer.Label = {
         this.playBtn.addEventListener('click', function (e) {
             my.region.play();
         });
+
+        this.deleteTransitionPoint.addEventListener('click', function (e) {
+            my.region.remove();
+        });
+
         // If the user dbl clicks the label, trigger the dblclick event for the assiciated region
         this.element.addEventListener('dblclick', function (e) {
             my.region.wavesurfer.fireEvent('label-dblclick', my.region, e);
-        });
-
-        this.deleteRegion.addEventListener('click', function (e) {
-            e.stopPropagation();
-            my.region.remove();
         });
     }
 };

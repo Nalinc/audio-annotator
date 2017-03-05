@@ -213,6 +213,21 @@ WaveSurfer.Region = {
 
     /* Remove a single region. */
     remove: function () {
+        var prevRegion, maxLastEndTime=Number.MIN_SAFE_INTEGER;
+        for (var index in this.wavesurfer.regions.list){
+            var region = this.wavesurfer.regions.list[index];
+            if(region.id==this.id)
+                continue;
+            if(region.end < this.end && region.end > maxLastEndTime){
+                maxLastEndTime=region.end;
+                prevRegion=region;
+            }
+        }
+        if (prevRegion){
+            prevRegion.update({
+                end: this.end
+            })
+        }
         if (this.element) {
             this.wrapper.removeChild(this.element);
             this.element = null;
