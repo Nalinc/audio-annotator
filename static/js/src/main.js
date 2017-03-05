@@ -117,6 +117,13 @@ Annotator.prototype = {
             if (my.currentTask.feedback === 'hiddenImage') {
                 my.hiddenImage.append(my.currentTask.imgUrl);
             }
+            var options = {
+                start: 0,
+                end: my.wavesurfer.getDuration()
+            }
+            var newRegion = my.wavesurfer.addRegion(options);
+            my.wavesurfer.fireEvent('region-dblclick',newRegion);
+            my.wavesurfer.fireEvent('region-dblclick',newRegion);
         });
 
         this.wavesurfer.on('click', function (e) {
@@ -129,7 +136,7 @@ Annotator.prototype = {
     },
 
     clickToMarkRegion: function(){
-        var index, options, startTime=0, endTime, maxLastEndTime=0, prevRegion;
+        var index, options, startTime=0, endTime, maxLastEndTime=0, currRegion;
         var wavesurfer = this.wavesurfer;
         var currentTime = wavesurfer.getCurrentTime();
 
@@ -152,17 +159,17 @@ Annotator.prototype = {
                 maxLastEndTime = region.end;
             }
             if(currentTime > region.start && currentTime < region.end){
-                prevRegion = region;
+                currRegion = region;
                 break loop1;
             }
         }
         if(!endTime){
             endTime = currentTime;
         }
-        if(prevRegion){
+        if(currRegion){
             startTime = currentTime+0.01;
-            endTime = prevRegion.end;
-            prevRegion.update({
+            endTime = currRegion.end;
+            currRegion.update({
                 start: region.start,
                 end: currentTime,
                 splitSegment: true
@@ -172,10 +179,11 @@ Annotator.prototype = {
             start: startTime,
             end: endTime
         }
-        if(prevRegion){
+        if(currRegion){
             options['splitSegment'] = true;
         }
         var newRegion = window.newRegion= wavesurfer.addRegion(options);
+        wavesurfer.fireEvent('region-dblclick',newRegion);
         wavesurfer.fireEvent('region-dblclick',newRegion);
     },
 
